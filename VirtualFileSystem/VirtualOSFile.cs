@@ -15,6 +15,6 @@ internal class VirtualOSFile : BaseVirtualFile
 
     internal override Stream GetFileStream()
     {
-        return new FileStream(accessPath, FileMode.Open, FileAccess.Read, FileShare.None);
+        return new FileStream(accessPath, FileMode.Open, FileAccess.Read, FileShare.Read);
     }
 }

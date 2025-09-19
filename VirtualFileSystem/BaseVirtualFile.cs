@@ -7,7 +7,8 @@ internal abstract class BaseVirtualFile
     internal byte[] GetData()
     {
         using var ms = new MemoryStream();
-        GetFileStream().CopyTo(ms);
+        using var fs = GetFileStream();
+        fs.CopyTo(ms);
         return ms.ToArray();
     }
 }

@@ -43,7 +43,7 @@ Stream stream = vfs.GetFileStream(virtualPath);
 byte[] content = vfs.GetFileContents(virtualPath);
 
 // or if it's a text file - get the text directly
-string text = GetFileContentsAsText(virtualPath);
+string text = vfs.GetFileContentsAsText(virtualPath);
 
 // you can get a list of all entry paths (virtual files)
 List<string> allEntries = vfs.Entries;
@@ -64,6 +64,7 @@ List<string> filesInFolderWithExtension = vfs.GetFilesInFolder(virtualPath, "txt
  - Paths are non case sensitive. "Some/Path/To/File.txt" is the same as "some/path/to/file.txt".
 
 ## Changes
+ - v1.4.0 - Bug fixes with file and folder indexing. Now simultaneous access from two instances of VFS is possible. VFS now implements IDisposable and prevents potential memory leaks.
  - v1.3.2 - Fixed bugs with files and folders lookup. Fixed test project target framework. Improved test project.
  - v1.3.1 - Switched to netstandard2.0 to improve compatibility.
  - v1.3 - Recursive search, ability to read text directly, ability to work with folders, etc.
