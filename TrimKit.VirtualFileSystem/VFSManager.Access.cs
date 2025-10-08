@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace VirtualFileSystem;
+namespace TrimKit.VirtualFileSystem;
 
 /// <summary>
 /// Virtual File System (VFS) manager

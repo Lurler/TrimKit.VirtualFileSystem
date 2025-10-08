@@ -67,6 +67,7 @@ The library is very minimalist internally, so the overhead compared to just read
  - Paths are non case sensitive. "Some/Path/To/File.txt" is the same as "some/path/to/file.txt".
 
 ## Changes
+ - v1.5.0 - Project rename along with namespace changes as a part of library collection consolidation.
  - v1.4.1 - Added micro "benchmark" to evaluate basic performance. No changes to the library itself, hence no new nuget.
  - v1.4 - Bug fixes with file and folder indexing. Now simultaneous access from two instances of VFS is possible. VFS now implements IDisposable and prevents potential memory leaks.
  - v1.3.2 - Fixed bugs with files and folders lookup. Fixed test project target framework. Improved test project.

@@ -1,6 +1,6 @@
 ﻿using System.IO.Compression;
 
-namespace VirtualFileSystem;
+namespace TrimKit.VirtualFileSystem;
 
 /// <summary>
 /// Concrete implementation for a virtual file.

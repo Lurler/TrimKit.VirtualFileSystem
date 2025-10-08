@@ -1,4 +1,4 @@
-﻿namespace VirtualFileSystem;
+﻿namespace TrimKit.VirtualFileSystem;
 
 internal abstract class BaseVirtualFile
 {

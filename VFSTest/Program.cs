@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using VirtualFileSystem;
+﻿using System.Diagnostics;
+using TrimKit.VirtualFileSystem;
 
 namespace VFSTest;
 
