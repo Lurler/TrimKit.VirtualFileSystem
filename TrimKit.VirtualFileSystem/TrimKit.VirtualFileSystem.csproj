@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+	  <LangVersion>latest</LangVersion>
+	  <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>TrimKit.VirtualFileSystem</Title>
+    <Description>Virtual File System (VFS) is a lightweight C# framework that creates an in-memory virtual file system by merging folders and zip-archives in order, forming a unified hierarchy that overrides identical paths - ideal for seamless modding, DLC, and game content expansions.</Description>
+    <RepositoryUrl>https://github.com/Lurler/TrimKit.VirtualFileSystem</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Version>1.4.0</Version>
+    <Authors>Lurler</Authors>
+    <PackageProjectUrl>https://github.com/Lurler/TrimKit.VirtualFileSystem</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
