@@ -61,16 +61,16 @@ List<string> filesInFolderWithExtension = vfs.GetFilesInFolder(virtualPath, "txt
 ```
 
 ## Folder packing
-You can automate packing folders into VFS-compatible zip archives and use the resulting file in your build script.
+You can automate packing folders into VFS-compatible zip archives in your build script and use the resulting file in your application.
 
 Additionally, you can also includes optional per-file obfuscation when packing. It's not a proper cryptographic encryption, but rather a simple obfuscation step which can deter casual inspection of packed assets.
 
 ```cs
 // pack a folder into a single file usable with VFS
-VFSManager.PackFolder("Path/to/Data/Folder/", "OutputFile.vfs");
+VFSManager.PackFolder("Path/to/Data/Folder/", "OutputFile.pak");
 
 // the same, but with optional obfuscation
-VFSManager.PackFolder("Path/to/Data/Folder/", "OutputFile.vfs", "Password");
+VFSManager.PackFolder("Path/to/Data/Folder/", "OutputFile.pak", "Password");
 ```
 
  - No password - files stored as plain data.
