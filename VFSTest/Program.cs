@@ -109,7 +109,24 @@ class Program
         Console.WriteLine("Folder \"folder/subfolder/\" exists: " + vfs.FolderExists("folder/subfolder/"));
         Console.WriteLine("Folder \"folder/subfolder/sub-sub-folder\" exists: " + vfs.FolderExists("folder/subfolder/sub-sub-folder"));
         Console.WriteLine("Folder \"folder/subfolder/sub-sub-folder/\" exists: " + vfs.FolderExists("folder/subfolder/sub-sub-folder/"));
+        Console.WriteLine();
 
+        // packaging and obfuscation test
+        Console.WriteLine("Packaging and obfuscation test:");
+        Console.WriteLine("Packaging folder into a pack file with a password.");
+        var password = "Super Secret Password";
+        VFSManager.PackFolder("Data/Mod1.pak/", "Data/packaged.pak", password);
+        Console.WriteLine("Creating new VFS.");
+        using var vfs2 = new VFSManager();
+        vfs2.AddEncryptedContainer("Data/packaged.pak", password);
+
+        // iterate over all of the files and get their contents
+        Console.WriteLine("Reading file contents: ");
+        foreach (string path in vfs2.Entries)
+        {
+            var text = vfs2.GetFileContentsAsText(path);
+            Console.WriteLine("Virtual path [" + path + "] -> \"" + text + "\"");
+        }
         Console.WriteLine();
 
         // leaving scope, so dispose should be called now.
@@ -134,6 +151,9 @@ class Program
         GC.Collect();
         GC.WaitForPendingFinalizers();
         GC.Collect();
+
+        Console.WriteLine("");
+        Console.WriteLine("Starting benchmark:");
 
         // start benchmark
         const int N = 10_000;

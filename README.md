@@ -60,6 +60,22 @@ List<string> filesInFolderWithExtension = vfs.GetFilesInFolder(virtualPath, "txt
 // ...and there are a few more functions you can call.
 ```
 
+## Folder packing
+You can automate packing folders into VFS-compatible zip archives and use the resulting file in your build script.
+
+Additionally, you can also includes optional per-file obfuscation when packing. It's not a proper cryptographic encryption, but rather a simple obfuscation step which can deter casual inspection of packed assets.
+
+```cs
+// pack a folder into a single file usable with VFS
+VFSManager.PackFolder("Path/to/Data/Folder/", "OutputFile.vfs");
+
+// the same, but with optional obfuscation
+VFSManager.PackFolder("Path/to/Data/Folder/", "OutputFile.vfs", "Password");
+```
+
+ - No password - files stored as plain data.
+ - With password - files stored as obfuscated data, transparently decoded at runtime.
+
 ## Performance
 The library is very minimalist internally, so the overhead compared to just reading files from the disc or Zip archive directly is basically zero.
 
@@ -67,15 +83,16 @@ The library is very minimalist internally, so the overhead compared to just read
  - Paths are non case sensitive. "Some/Path/To/File.txt" is the same as "some/path/to/file.txt".
 
 ## Changes
+ - v1.6.0 - Added ability to pack folders into a single file usable with VFS and with optional obfuscation.
  - v1.5.0 - Project rename along with namespace changes as a part of library collection consolidation.
  - v1.4.1 - Added micro "benchmark" to evaluate basic performance. No changes to the library itself, hence no new nuget.
- - v1.4 - Bug fixes with file and folder indexing. Now simultaneous access from two instances of VFS is possible. VFS now implements IDisposable and prevents potential memory leaks.
+ - v1.4.0 - Bug fixes with file and folder indexing. Now simultaneous access from two instances of VFS is possible. VFS now implements IDisposable and prevents potential memory leaks.
  - v1.3.2 - Fixed bugs with files and folders lookup. Fixed test project target framework. Improved test project.
  - v1.3.1 - Switched to netstandard2.0 to improve compatibility.
- - v1.3 - Recursive search, ability to read text directly, ability to work with folders, etc.
- - v1.2 - Some refactoring and improvements based on feedback received.
- - v1.1 - Added folder indexing, some edge case checks and some minor improvements.
- - v1.0 - Initial release.
+ - v1.3.0 - Recursive search, ability to read text directly, ability to work with folders, etc.
+ - v1.2.0 - Some refactoring and improvements based on feedback received.
+ - v1.1.0 - Added folder indexing, some edge case checks and some minor improvements.
+ - v1.0.0 - Initial release.
  
 ## TrimKit Collection
 This library is part of the **TrimKit** collection - a set of small, focused C# libraries that make game development more enjoyable by reducing the need for boilerplate code and providing simple reusable building blocks that can be dropped into any project.

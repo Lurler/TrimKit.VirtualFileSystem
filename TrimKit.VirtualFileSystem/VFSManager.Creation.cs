@@ -11,7 +11,7 @@ public partial class VFSManager : IDisposable
     /// <summary>
     /// References to all opened zip archives so we can release them automatically when VFSManager leaves scope.
     /// </summary>
-    private readonly List<ZipArchive> zipArchiveHandles = new();
+    private readonly List<ZipArchive> zipArchiveHandles = [];
 
     /// <summary>
     /// Stores paths to all files in the VFS with newer files overriding the existing files as they are loaded
@@ -57,18 +57,29 @@ public partial class VFSManager : IDisposable
         throw new ArgumentException("Incorrect path provided.");
     }
 
+    public void AddEncryptedContainer(string path, string password)
+    {
+        if (!File.Exists(path))
+            throw new ArgumentException("Incorrect path provided.");
+        if (string.IsNullOrWhiteSpace(password))
+            throw new ArgumentException($"Correct password must be provided.");
+
+        IncludeArchive(path, password);
+    }
+
     /// <summary>
     /// Formats virtual path to be uniform, so there are no identical entries but with different paths.
     /// </summary>
-    private string NormalizePath(string path)
+    private static string NormalizePath(string path)
     {
         return path
             .Replace(@"\\", @"\")
             .Replace(@"\", @"/")
-            .TrimEnd('/');
+            .TrimEnd('/')
+            .TrimStart('/');
     }
 
-    private void IncludeArchive(string path)
+    private void IncludeArchive(string path, string? password = null)
     {
         try
         {
@@ -91,8 +102,24 @@ public partial class VFSManager : IDisposable
                     continue;
                 }
 
+                // generate deobfuscation key if needed
+                byte[]? key = null;
+                if (password is not null)
+                {
+                    key = GenerateKey(password);
+                }
+
                 // create a new virtual file or replace an existing one
-                virtualFiles[virtualPath] = new VirtualZippedFile(zip, entry.FullName);
+                if (password is null)
+                {
+                    // add normal file
+                    virtualFiles[virtualPath] = new VirtualZippedFile(zip, entry.FullName);
+                }
+                else
+                {
+                    // add obfuscated file
+                    virtualFiles[virtualPath] = new VirtualObfuscatedZippedFile(zip, entry.FullName, key!);
+                }
 
                 // finally, extract folder path and include it too
                 var virtualFolder = NormalizePath(Path.GetDirectoryName(virtualPath) ?? "");
