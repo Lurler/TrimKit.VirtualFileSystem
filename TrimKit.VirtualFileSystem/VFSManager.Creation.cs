@@ -35,6 +35,31 @@ public partial class VFSManager : IDisposable
     public List<string> Folders => virtualFolders.ToList();
 
     /// <summary>
+    /// Delegate used to decide whether a virtual path should be included in the VFS.
+    /// Return true to include, false to ignore.
+    /// The input is the normalized virtual path (forward slashes, no leading/trailing slash).
+    /// Default implementation ignores files starting with a dot (usually varioust system files).
+    /// </summary>
+    public delegate bool PathInclusionPredicate(string virtualPath);
+
+    /// <summary>
+    /// <inheritdoc cref="PathInclusionPredicate" />
+    /// </summary>
+    public PathInclusionPredicate PathInclusionCheck { get; set; } = DefaultPathInclusionPredicate;
+
+    private static bool DefaultPathInclusionPredicate(string virtualPath)
+    {
+        // no need to include empty paths
+        if (string.IsNullOrEmpty(virtualPath))
+            return false;
+
+        var name = Path.GetFileName(virtualPath.TrimEnd('/'));
+
+        // ignore dot-prefixed names
+        return !string.IsNullOrEmpty(name) && name[0] != '.';
+    }
+
+    /// <summary>
     /// Adds a new root container which can be either a folder on the hard drive or a zip file.
     /// </summary>
     public void AddRootContainer(string path)
@@ -57,6 +82,10 @@ public partial class VFSManager : IDisposable
         throw new ArgumentException("Incorrect path provided.");
     }
 
+    /// <summary>
+    /// <inheritdoc cref="AddRootContainer" />
+    /// Correct password must be specified.
+    /// </summary>
     public void AddEncryptedContainer(string path, string password)
     {
         if (!File.Exists(path))
@@ -70,7 +99,7 @@ public partial class VFSManager : IDisposable
     /// <summary>
     /// Formats virtual path to be uniform, so there are no identical entries but with different paths.
     /// </summary>
-    private static string NormalizePath(string path)
+    internal static string NormalizePath(string path)
     {
         return path
             .Replace(@"\\", @"\")
@@ -101,6 +130,10 @@ public partial class VFSManager : IDisposable
                     virtualFolders.Add(virtualPath + "/");
                     continue;
                 }
+
+                // check if a path should be ignored
+                if (!PathInclusionCheck(virtualPath))
+                    continue;
 
                 // generate deobfuscation key if needed
                 byte[]? key = null;
@@ -164,8 +197,12 @@ public partial class VFSManager : IDisposable
                      // standardize slashes
                      var relativePath = NormalizePath(file);
 
+                     // check if a path should be ignored
+                     if (!PathInclusionCheck(relativePath))
+                         return;
+
                      // create a virtual file, then add or replace it in the dictionary
-                     virtualFiles[relativePath] = new VirtualOSFile(path + "/" + file);
+                     virtualFiles[relativePath] = new VirtualOSFile(path + "/" + file, relativePath);
                  });
     }
 

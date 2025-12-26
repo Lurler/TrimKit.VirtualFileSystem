@@ -57,6 +57,9 @@ List<string> filesInFolder = vfs.GetFilesInFolder(virtualPath);
 // same as above, but you can also filter by extension
 List<string> filesInFolderWithExtension = vfs.GetFilesInFolder(virtualPath, "txt");
 
+// in case you need FileInfo equivalent - it's there too. Inside are things like Name, Extension, Size, ContainerType, etc.
+VirtualFileInfo fileinfo = vfs.GetFileInfo(virtualPath);
+
 // ...and there are a few more functions you can call.
 ```
 
@@ -67,10 +70,10 @@ Additionally, you can also includes optional per-file obfuscation when packing. 
 
 ```cs
 // pack a folder into a single file usable with VFS
-VFSManager.PackFolder("Path/to/Data/Folder/", "OutputFile.pak");
+VFSManager.PackFolder("C://Path/to/Data/Folder/", "OutputFile.pak");
 
 // the same, but with optional obfuscation
-VFSManager.PackFolder("Path/to/Data/Folder/", "OutputFile.pak", "Password");
+VFSManager.PackFolder("C://Path/to/Data/Folder/", "OutputFile.pak", "Password");
 ```
 
  - No password - files stored as plain data.
@@ -83,6 +86,7 @@ The library is very minimalist internally, so the overhead compared to just read
  - Paths are non case sensitive. "Some/Path/To/File.txt" is the same as "some/path/to/file.txt".
 
 ## Changes
+ - v1.7.0 - Added ability to get FileInfo equivalent for the virtual files in VFS. Added ability to filter out unneeded files in containers based on a predicate function (default implementation filters out files whose names start with a dot which is typical for various system files).
  - v1.6.0 - Added ability to pack folders into a single file usable with VFS and with optional obfuscation.
  - v1.5.0 - Project rename along with namespace changes as a part of library collection consolidation.
  - v1.4.1 - Added micro "benchmark" to evaluate basic performance. No changes to the library itself, hence no new nuget.
@@ -100,6 +104,7 @@ This library is part of the **TrimKit** collection - a set of small, focused C# 
 - [TrimKit.EventBus](https://github.com/Lurler/TrimKit.EventBus) - Lightweight, mutation-safe event bus (event aggregator).
 - [TrimKit.GameSettings](https://github.com/Lurler/TrimKit.GameSettings) - JSON-based persistent settings manager.
 - [TrimKit.VirtualFileSystem](https://github.com/Lurler/TrimKit.VirtualFileSystem) - Unified file hierarchy abstraction to enable modding and additional content in games.
+- [TrimKit.StatDictionary](https://github.com/Lurler/TrimKit.StatDictionary) - Simple character stat container for RPG or other games relying on stat heavy calculations.
 
 Each module is independent and can be used standalone or combined with others for a complete lightweight foundation.
 

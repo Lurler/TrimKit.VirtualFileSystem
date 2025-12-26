@@ -60,6 +60,18 @@ public partial class VFSManager : IDisposable
     }
 
     /// <summary>
+    /// Returns various metadata for a given file.
+    /// </summary>
+    public VirtualFileInfo GetFileInfo(string virtualPath)
+    {
+        if (!virtualFiles.TryGetValue(NormalizePath(virtualPath), out BaseVirtualFile? value))
+        {
+            throw new FileNotFoundException($"The virtual file '{virtualPath}' does not exist.");
+        }
+        return value.GetFileInfo();
+    }
+
+    /// <summary>
     /// Get list of files in a given folder (list of their paths).
     /// </summary>
     public List<string> GetFilesInFolder(string virtualPath, bool recursive = false)

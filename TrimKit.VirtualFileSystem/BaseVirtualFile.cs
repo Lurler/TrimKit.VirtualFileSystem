@@ -11,4 +11,6 @@ internal abstract class BaseVirtualFile
         fs.CopyTo(ms);
         return ms.ToArray();
     }
+
+    internal abstract VirtualFileInfo GetFileInfo();
 }

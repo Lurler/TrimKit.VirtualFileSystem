@@ -101,6 +101,30 @@ class Program
         Console.WriteLine("Folders in \"folder\" with recursion: " + string.Join(", ", list8));
         Console.WriteLine();
 
+        // file info check
+        Console.WriteLine("FileInfo OS test:");
+        var fileInfoOs = vfs.GetFileInfo("folder/file3.txt");
+        Console.WriteLine("Name: " + fileInfoOs.Name);
+        Console.WriteLine("Extension: " + fileInfoOs.Extension);
+        Console.WriteLine("Size: " + fileInfoOs.Size);
+        Console.WriteLine("ContainerType: " + fileInfoOs.ContainerType);
+        Console.WriteLine("LastWriteTime: " + fileInfoOs.LastWriteTime);
+        Console.WriteLine("VfsPath: " + fileInfoOs.VfsPath);
+        Console.WriteLine("VfsFolder: " + fileInfoOs.VfsFolder);
+        Console.WriteLine();
+
+        // file info check
+        Console.WriteLine("FileInfo Zip test:");
+        var fileInfoZip = vfs.GetFileInfo("folder2/file5.txt");
+        Console.WriteLine("Name: " + fileInfoZip.Name);
+        Console.WriteLine("Extension: " + fileInfoZip.Extension);
+        Console.WriteLine("Size: " + fileInfoZip.Size);
+        Console.WriteLine("ContainerType: " + fileInfoZip.ContainerType);
+        Console.WriteLine("LastWriteTime: " + fileInfoZip.LastWriteTime);
+        Console.WriteLine("VfsPath: " + fileInfoZip.VfsPath);
+        Console.WriteLine("VfsFolder: " + fileInfoZip.VfsFolder);
+        Console.WriteLine();
+
         // other checks
         Console.WriteLine("Other tests:");
         Console.WriteLine("Folder \"folder\" exists: " + vfs.FolderExists("folder"));
