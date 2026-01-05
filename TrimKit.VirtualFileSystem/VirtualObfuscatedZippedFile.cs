@@ -10,20 +10,22 @@ internal class VirtualObfuscatedZippedFile : VirtualZippedFile
 {
     private readonly byte[] key;
 
-    internal VirtualObfuscatedZippedFile(ZipArchive zipArchiveReference, string accessPath, byte[] key)
-        : base(zipArchiveReference, accessPath)
+    internal VirtualObfuscatedZippedFile(ZipArchiveData zipFile, string accessPath, byte[] key)
+        : base(zipFile, accessPath)
     {
         this.key = key ?? throw new ArgumentNullException(nameof(key));
     }
 
     internal override Stream GetFileStream()
     {
-        using var entryStream = zipEntry.Open();
-        using var ms = new MemoryStream();
+        using var entryStream = base.GetFileStream();
+    
+        // read all data to a memory stream
+        var encrypted = new byte[entryStream.Length];
+        using var ms = new MemoryStream(encrypted, writable: true);
         entryStream.CopyTo(ms);
-        byte[] encrypted = ms.ToArray();
 
-        byte[] decrypted = VFSManager.TransformBytes(encrypted, key);
+        var decrypted = VFSManager.TransformBytes(encrypted, key);
 
         return new MemoryStream(decrypted, writable: false);
     }
