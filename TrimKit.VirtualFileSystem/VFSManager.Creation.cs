@@ -146,12 +146,15 @@ public partial class VFSManager : IDisposable
                 if (password is null)
                 {
                     // add normal file
-                    virtualFiles[virtualPath] = new VirtualZippedFile(zip, entry.FullName);
+                    virtualFiles[virtualPath] = new VirtualZippedFile(new ZipArchiveData(zip, path),
+                                                                      entry.FullName);
                 }
                 else
                 {
                     // add obfuscated file
-                    virtualFiles[virtualPath] = new VirtualObfuscatedZippedFile(zip, entry.FullName, key!);
+                    virtualFiles[virtualPath] = new VirtualObfuscatedZippedFile(new ZipArchiveData(zip, path),
+                                                                                entry.FullName,
+                                                                                key!);
                 }
 
                 // finally, extract folder path and include it too
