@@ -9,8 +9,17 @@ using System.Reflection;
 /// </summary>
 internal class VirtualZippedFile : BaseVirtualFile
 {
+
+    /// <summary>
+    /// Reflection handle for the internal ZipArchiveEntry compression method property.
+    /// Used to detect whether the entry is stored without compression.
+    /// </summary>
     private static readonly PropertyInfo? ZipEntryPropertyCompressionMethod;
 
+    /// <summary>
+    /// Reflection handle for the internal ZipArchiveEntry offset-of-compressed-data property.
+    /// Used to locate raw file data inside the ZIP archive.
+    /// </summary>
     private static readonly PropertyInfo? ZipEntryPropertyOffsetOfCompressedData;
 
     protected readonly string accessPath;
@@ -19,8 +28,16 @@ internal class VirtualZippedFile : BaseVirtualFile
 
     protected readonly ZipArchiveData zipFile;
 
+    /// <summary>
+    /// Cached byte offset of the entry data inside the ZIP file, obtained via reflection.
+    /// Only set when the entry is stored without compression.
+    /// </summary>
     private long? zipEntryOffsetViaReflection;
 
+    /// <summary>
+    /// Static constructor which is used to determine if access to zip archive contents via reflection is supported.
+    /// The corresponding fields will be either set to correct types or null.
+    /// </summary>
     static VirtualZippedFile()
     {
         try
@@ -39,6 +56,9 @@ internal class VirtualZippedFile : BaseVirtualFile
         }
     }
 
+    /// <summary>
+    /// Creates a virtual file for a specific entry inside a ZIP archive.
+    /// </summary>
     internal VirtualZippedFile(ZipArchiveData zipFile, string accessPath)
     {
         this.zipFile = zipFile;
@@ -76,16 +96,16 @@ internal class VirtualZippedFile : BaseVirtualFile
 
     internal override Stream GetFileStream()
     {
+        // if the entry is stored uncompressed and access via reflection is supported
         if (this.zipEntryOffsetViaReflection.HasValue)
         {
-            // 1. Reflection is supported
-            // 2. Detected no compression - can read the file directly (otherwise the property would be null)
-            // This way we can enable multithreaded file access and stream seek by opening the ZIP file directly.
+            // all good, we can enable multithreaded file access and stream seek by opening the ZIP file directly
             return new SubStream(File.OpenRead(this.zipFile.FilePath),
                                  this.zipEntryOffsetViaReflection.Value,
                                  this.zipEntry.Length);
         }
 
+        // fallback for compressed entries or unsupported runtimes
         return this.zipEntry.Open();
     }
 }

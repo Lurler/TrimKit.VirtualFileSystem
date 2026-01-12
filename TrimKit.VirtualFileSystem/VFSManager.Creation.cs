@@ -55,8 +55,16 @@ public partial class VFSManager : IDisposable
 
         var name = Path.GetFileName(virtualPath.TrimEnd('/'));
 
-        // ignore dot-prefixed names
-        return !string.IsNullOrEmpty(name) && name[0] != '.';
+        // exclude anything where ANY path segment or filename starts with a dot
+        // e.g. ".DS_Store", ".git/whatever", etc.
+        var segments = virtualPath.Split(['/'], StringSplitOptions.RemoveEmptyEntries);
+        foreach (var segment in segments)
+        {
+            if (segment.Length > 0 && segment[0] == '.')
+                return false;
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -182,16 +190,7 @@ public partial class VFSManager : IDisposable
         // get clean path
         path = NormalizePath(new DirectoryInfo(path).FullName);
 
-        // include all subdirectories, even empty ones
-        Directory.GetDirectories(path, "*", SearchOption.AllDirectories)
-                 .Select(d => NormalizePath(d.Remove(0, path.Length + 1)))
-                 .ToList()
-                 .ForEach(dir =>
-                 {
-                     virtualFolders.Add(dir + "/");
-                 });
-
-        // next, get all file paths and create virtual files
+        // get all file paths and create virtual files
         Directory.GetFiles(path, "*", SearchOption.AllDirectories)
                  .Select(p => p.Remove(0, path.Length + 1))
                  .ToList()
@@ -206,6 +205,14 @@ public partial class VFSManager : IDisposable
 
                      // create a virtual file, then add or replace it in the dictionary
                      virtualFiles[relativePath] = new VirtualOSFile(path + "/" + file, relativePath);
+
+                     // include all parent folders for this included file
+                     var folder = NormalizePath(Path.GetDirectoryName(relativePath) ?? "");
+                     while (!string.IsNullOrEmpty(folder))
+                     {
+                         virtualFolders.Add(folder + "/");
+                         folder = NormalizePath(Path.GetDirectoryName(folder) ?? "");
+                     }
                  });
     }
 
