@@ -1,6 +1,4 @@
-﻿using System.IO.Compression;
-
-namespace TrimKit.VirtualFileSystem;
+﻿namespace TrimKit.VirtualFileSystem;
 
 /// <summary>
 /// Concrete implementation for an obfuscated virtual file.

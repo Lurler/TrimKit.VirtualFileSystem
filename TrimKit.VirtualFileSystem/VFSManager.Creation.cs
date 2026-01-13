@@ -192,7 +192,7 @@ public partial class VFSManager : IDisposable
 
         // get all file paths and create virtual files
         Directory.GetFiles(path, "*", SearchOption.AllDirectories)
-                 .Select(p => p.Remove(0, path.Length + 1))
+                 .Select(p => p.Remove(0, path.Length + 1)) // this converts from absolute path to relative by chopping the initial segment
                  .ToList()
                  .ForEach(file =>
                  {

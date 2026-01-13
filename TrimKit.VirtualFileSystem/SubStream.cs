@@ -6,22 +6,22 @@
 internal class SubStream : Stream
 {
     /// <summary>
-    /// The underlying source stream that provides the actual data.
+    /// Underlying source stream that provides the actual data.
     /// </summary>
     private readonly Stream baseStream;
 
     /// <summary>
-    /// The maximum length of the exposed substream window.
+    /// Maximum length of the exposed substream window.
     /// </summary>
     private readonly long length;
 
     /// <summary>
-    /// The starting offset within the base stream where this substream begins.
+    /// Starting offset within the base stream where this substream begins.
     /// </summary>
     private readonly long streamOffset;
 
     /// <summary>
-    /// The current read position within the substream window.
+    /// Current read position within the substream window.
     /// </summary>
     private long position;
 
@@ -47,7 +47,7 @@ internal class SubStream : Stream
 
     /// <summary>
     /// Gets or sets the current position within the substream window.
-    /// Thrown if the position is outside the bounds of the substream.
+    /// Throws an exception if the position is outside the bounds of the substream.
     /// </summary>
     public override long Position
     {
