@@ -86,6 +86,7 @@ The library is very minimalist internally, so the overhead compared to just read
  - Paths are non case sensitive. "Some/Path/To/File.txt" is the same as "some/path/to/file.txt".
 
 ## Changes
+ - v1.8.1 - Fixed folder indexing inside zip archives.
  - v1.8.0 - Implemented direct ZIP entry stream reading for non-compressed ZIP archives (including obfuscated archives). Now Reflection is used to read ZIP entries directly, enabling multithreaded access and stream seeking. Automatically falls back to the basic non-seekable thread-unsafe implementation when Reflection is not supported. Improved folder indexing, now if no files in a particular folder are included into VFS the folder is not included either. Improved default auto exclude function such that it excludes dot prefixed folders as well, e.g. ".git/\*" (as usual you can override it at your convenience).
  - v1.7.0 - Added ability to get FileInfo equivalent for the virtual files in VFS. Added ability to filter out unneeded files in containers based on a predicate function (default implementation filters out files whose names start with a dot which is typical for various system files).
  - v1.6.0 - Added ability to pack folders into a single file usable with VFS and with optional obfuscation.

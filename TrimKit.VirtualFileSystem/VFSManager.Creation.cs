@@ -165,10 +165,14 @@ public partial class VFSManager : IDisposable
                                                                                 key!);
                 }
 
-                // finally, extract folder path and include it too
-                var virtualFolder = NormalizePath(Path.GetDirectoryName(virtualPath) ?? "");
-                if (!string.IsNullOrEmpty(virtualFolder))
-                    virtualFolders.Add(virtualFolder + "/");
+                // finally, extract folder path and include it too, including all parent folders
+                var folderPath = NormalizePath(Path.GetDirectoryName(virtualPath) ?? "");
+                while (!string.IsNullOrEmpty(folderPath))
+                {
+                    virtualFolders.Add(folderPath + "/");
+                    folderPath = NormalizePath(Path.GetDirectoryName(folderPath) ?? "");
+                }
+
             }
         }
         catch (InvalidDataException ex)
